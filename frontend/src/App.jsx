@@ -1,14 +1,19 @@
 import './App.css'
+import Navbar from './components/Navbar'
+import Hero from './components/Hero'
+import Features from './components/Features'
+import UploadCard from "./components/UploadCard";
+import Results from "./components/Results";
 
 function App() {
   return (
-    <div className="app">
-      <h1>HireMind AI</h1>
-
-      <p>AI Powered Resume Analyzer & Interview Assistant</p>
-
-      <button>Upload Resume</button>
-    </div>
+   <>
+  <Navbar />
+  <Hero />
+  <Features />
+  <UploadCard />
+  <Results />
+</>
   )
 }
 
