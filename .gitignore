@@ -1,0 +1,12 @@
+# Dependencies
+node_modules/
+
+# Environment variables
+.env
+backend/.env
+
+# Uploaded resumes
+backend/uploads/
+
+# macOS files
+.DS_Store
