@@ -1,4 +1,10 @@
 function Hero() {
+  const scrollToUpload = () => {
+    document.getElementById("upload")?.scrollIntoView({
+      behavior: "smooth",
+    });
+  };
+
   return (
     <section className="hero">
       <div className="badge">
@@ -17,11 +23,17 @@ function Hero() {
       </p>
 
       <div className="hero-buttons">
-        <button className="primary-btn">
+        <button
+          className="primary-btn"
+          onClick={scrollToUpload}
+        >
           Upload Resume
         </button>
 
-        <button className="secondary-btn">
+        <button
+          className="secondary-btn"
+          onClick={() => alert("Demo Coming Soon 🚀")}
+        >
           Try Demo
         </button>
       </div>
@@ -33,7 +45,7 @@ function Hero() {
         <span>✓ Skill Gap Detection</span>
       </div>
     </section>
-  )
+  );
 }
 
-export default Hero
+export default Hero;
