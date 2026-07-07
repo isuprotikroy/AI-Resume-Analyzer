@@ -7,7 +7,7 @@ import analyzeRoutes from "./routes/analyzeRoutes.js";
 
 dotenv.config();
 
-console.log("GEMINI_API_KEY =", process.env.GEMINI_API_KEY);
+console.log("✅ Gemini API Key loaded:", !!process.env.GEMINI_API_KEY);
 
 const app = express();
 
