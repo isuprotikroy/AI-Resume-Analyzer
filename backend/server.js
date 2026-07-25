@@ -1,11 +1,11 @@
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
+import "dotenv/config";
 
 import resumeRoutes from "./routes/resumeRoutes.js";
 import analyzeRoutes from "./routes/analyzeRoutes.js";
 
-dotenv.config();
+
 
 console.log("✅ Gemini API Key loaded:", !!process.env.GEMINI_API_KEY);
 
