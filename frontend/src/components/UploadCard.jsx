@@ -1,10 +1,14 @@
 import { useRef, useState } from "react";
+import { useResume } from "../context/ResumeContext";
+import { uploadResume } from "../services/api";
 
 function UploadCard() {
   const fileInput = useRef();
 
   const [fileName, setFileName] = useState("No file selected");
   const [fileSize, setFileSize] = useState("");
+
+  const { setAnalysis, loading, setLoading } = useResume();
 
   const handleClick = () => {
     fileInput.current.click();
@@ -31,52 +35,41 @@ function UploadCard() {
     formData.append("resume", file);
 
     try {
-      const response = await fetch(
-        "http://localhost:5001/api/resume/upload",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      setLoading(true);
 
-      const data = await response.json();
+      // Upload + AI analysis
+      const uploadData = await uploadResume(formData);
 
-      console.log(data);
+      console.log("Backend Response:", uploadData);
 
-      // Resume text extracted from the PDF
-      const resumeText = data.extractedText;
+      if (!uploadData.success) {
+        alert(uploadData.message || "Analysis failed.");
+        return;
+      }
 
-      // Send the extracted text to the AI
-      const aiResponse = await fetch(
-        "http://localhost:5001/api/analyze",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            resumeText,
-          }),
-        }
-      );
+      // Save analysis globally
+      setAnalysis(uploadData.analysis);
 
-      const result = await aiResponse.json();
+      // Scroll to results
+      document
+        .querySelector(".results")
+        ?.scrollIntoView({ behavior: "smooth" });
 
-      console.log(result);
-
-      alert("AI Analysis Complete!");
     } catch (error) {
-      console.error(error);
-      alert("Upload failed.");
+      console.error("Upload Error:", error);
+      alert("Something went wrong.");
+    } finally {
+      setLoading(false);
     }
   };
+
   return (
     <section id="upload" className="upload-section">
       <h2>Upload Your Resume</h2>
 
       <p>
-        Drag & drop your resume or click below to upload.
-        We support PDF and DOCX files.
+        Upload your PDF resume and let AI analyze your skills,
+        ATS compatibility, and improvement areas.
       </p>
 
       <div className="upload-card">
@@ -86,39 +79,35 @@ function UploadCard() {
 
         <input
           type="file"
-          accept=".pdf,.doc,.docx"
           ref={fileInput}
-          onChange={handleFileChange}
+          accept=".pdf"
           hidden
+          onChange={handleFileChange}
         />
 
-        <button
-          className="upload-btn"
-          onClick={handleClick}
-        >
+        <button className="upload-btn" onClick={handleClick}>
           Upload Resume
         </button>
 
         <div className="file-name">
-          <p>📄 {fileName}</p>
+          <p>{fileName}</p>
 
-          {fileSize && (
-            <p>Size: {fileSize} KB</p>
-          )}
-
-          {fileName !== "No file selected" && (
-            <div className="ready">
-              <p>✅ Ready for AI Analysis</p>
-
-              <button
-                className="analyze-btn"
-                onClick={handleAnalyze}
-              >
-                Analyze Resume
-              </button>
-            </div>
-          )}
+          {fileSize && <p>Size: {fileSize} KB</p>}
         </div>
+
+        {fileName !== "No file selected" && (
+          <div className="ready">
+            <p>✅ Ready for AI Analysis</p>
+
+            <button
+              className="analyze-btn"
+              onClick={handleAnalyze}
+              disabled={loading}
+            >
+              {loading ? "Analyzing..." : "Analyze Resume"}
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );

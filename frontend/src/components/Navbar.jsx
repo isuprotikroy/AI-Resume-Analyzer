@@ -1,14 +1,39 @@
 function Navbar() {
   return (
     <nav className="navbar">
-      <h2 className="logo">HireMind AI</h2>
+      <div className="logo">
+        <span className="logo-icon">⚡</span>
+        <span>ResumeFlow</span>
+      </div>
 
       <ul className="nav-links">
-        <li>Home</li>
-        <li>Features</li>
-        <li>About</li>
-        <li>Contact</li>
+        <li><a href="#">Home</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#upload">Resume Analyzer</a></li>
+        <li><a href="#results">Results</a></li>
       </ul>
+
+      <div className="nav-buttons">
+        <a
+          href="https://github.com/Kephh/AI-Resume-Analyzer"
+          target="_blank"
+          rel="noreferrer"
+          className="github-btn"
+        >
+          GitHub
+        </a>
+
+        <button
+          className="try-btn"
+          onClick={() =>
+            document
+              .getElementById("upload")
+              ?.scrollIntoView({ behavior: "smooth" })
+          }
+        >
+          Try Free →
+        </button>
+      </div>
     </nav>
   );
 }
